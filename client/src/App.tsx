@@ -1,125 +1,112 @@
 import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { Toaster, toast } from 'react-hot-toast';
+import { IMessage } from './interfaces/message.interface';
+
+//components
+import TypeMessage from './components/TypeMessage';
+import MessageList from './components/MessageList';
+import ChatHeader from './components/ChatHeader';
+import { getMessageWithMetaData } from './utils/common';
+
 const socket = io('http://localhost:8080');
+
 function App() {
-  const [messages, setMessages] = useState<
-    {
-      message: string;
-      id: string;
-      username: string;
-      time: string;
-      date: string;
-    }[]
-  >([]);
+  // global state for messages
+  const [messages, setMessages] = useState<IMessage[]>([]);
+
+  // refs
   const message = useRef<string>('');
   const messageRef = useRef<HTMLInputElement>(null);
   const username = useRef<string>('');
   const roomID = useRef<string>('');
 
+  /**
+   * Function to send a message.
+   */
   const sendMessage = () => {
     if (!message.current) return;
     if (!username.current) {
-      toast.error('Cannot send messages without username');
+      toast.error(
+        'Cannot send messages without username, please enter username first',
+        {
+          position: 'bottom-center',
+        }
+      );
       document.getElementById('username')?.focus();
       return;
     }
+    const newMsg: IMessage = getMessageWithMetaData(
+      message.current,
+      username.current
+    );
+
+    // update messages global state
+    setMessages((messages) => [...messages, newMsg]);
+
+    // emit message to server
+    socket.emit('new_message', { message: newMsg, roomID: roomID.current });
+
+    // clear input
+    messageRef!.current!.value = '';
+  };
+
+  // socket listeners
+  useEffect(() => {
+    // receive message
+    socket.on('receive_message', (message: IMessage) => {
+      setMessages((messages) => [...messages, message]);
+    });
+
+    // When a user joins
+    socket.on('user_joined', (username) => {
+      toast(`${username} joined the room!`);
+      setMessages((messages) => [
+        ...messages,
+        {
+          message: `${username} joined the room!`,
+          type: 'join',
+          date: new Date().toISOString(),
+          id: Date.now().toString(),
+          username,
+        },
+      ]);
+    });
+
+    return () => {
+      socket.off('receive_message');
+      socket.off('user_joined');
+    };
+  }, [socket]);
+  /**
+   * Function to join a room and emit a 'join_room' event.
+   */
+  const joinRoom = () => {
+    socket.emit('join_room', {
+      roomID: roomID.current,
+      username: username.current,
+    });
     setMessages((messages) => [
       ...messages,
       {
-        message: message.current,
+        message: `You've Joined Room ${roomID.current}`,
+        type: 'join',
+        date: new Date().toISOString(),
         id: Date.now().toString(),
         username: username.current,
-        time: new Date().toLocaleTimeString(),
-        date: new Date().toLocaleDateString(),
       },
     ]);
-    socket.emit('new_message', {
-      message: message.current,
-      id: Date.now().toString(),
-      username: username.current,
-      time: new Date().toLocaleTimeString(),
-      date: new Date().toLocaleDateString(),
-    });
-    messageRef!.current!.value = '';
   };
-  useEffect(() => {
-    socket.on('receive_message', (message) => {
-      setMessages((messages) => [...messages, message]);
-    });
-  }, [socket]);
   return (
-    <div className='h-dvh bg-gray-100 w-full p-3 md:w-1/3 gap-4 md:mx-auto flex flex-col'>
+    <div className='h-dvh bg-gray-100 w-full p-3 md:max-w-[350px] gap-4 md:mx-auto flex flex-col'>
       <Toaster />
-      <section className='flex flex-col md:flex-row justify-between gap-2 w-full'>
-        <div className='flex gap-2 w-1/2'>
-          <input
-            id='username'
-            className='input-primary w-full'
-            placeholder='Enter Username...'
-            onChange={(e) => (username.current = e.target.value)}
-          />
-        </div>
-
-        <div className='flex gap-2 w-1/2'>
-          <input
-            className='flex-1 input-primary w-full  '
-            placeholder='Room ID'
-            onChange={(e) => (roomID.current = e.target.value)}
-          />
-          <button
-            className='btn-primary rounded'
-            onClick={() => socket.emit('join_room', roomID.current)}
-          >
-            Join
-          </button>
-        </div>
-      </section>
-      <section className='flex-1 bg-gray-50 h-full overflow-auto p-3 rounded-md shadow'>
-        {messages.map((message) => (
-          <div
-            className={`flex flex-col flex-1 gap-1 ${
-              message.username === username.current && 'items-end'
-            }`}
-            key={message.id}
-          >
-            <div className='text-gray-500 text-sm'> {message.username}</div>
-            <div
-              className={
-                message.username === username.current
-                  ? 'sender-message'
-                  : 'reciever-message'
-              }
-            >
-              {message.message}
-            </div>
-            <div className='text-xs text-gray-500'>
-              {message.date} {message.time}
-            </div>
-          </div>
-        ))}
-      </section>
-      <section className='h-10 rounded-md mt-auto bg-gray-200 flex gap-2'>
-        <input
-          autoFocus
-          id='message'
-          ref={messageRef}
-          className='h-full bg-transparent flex-1 outline-none p-3'
-          type='text'
-          name='message'
-          onChange={(e) => (message.current = e.target.value)}
-          placeholder='Enter your message...'
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              sendMessage();
-            }
-          }}
-        />
-        <button className='btn-primary' onClick={sendMessage}>
-          Send
-        </button>
-      </section>
+      <ChatHeader username={username} roomID={roomID} joinRoom={joinRoom} />
+      <MessageList messages={messages} username={username} roomID={roomID} />
+      <TypeMessage
+        message={message}
+        messageRef={messageRef}
+        sendMessage={sendMessage}
+      />
     </div>
   );
 }
