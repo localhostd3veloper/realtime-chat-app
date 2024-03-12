@@ -9,7 +9,7 @@
     @apply px-3 py-1.5 rounded-md outline-none bg-transparent border-gray-400 border;
   }
   .btn-primary {
-    @apply px-3 bg-blue-500 text-white hover:bg-blue-700 rounded-r duration-150;
+    @apply px-3 py-1 bg-blue-500 text-white hover:bg-blue-700 rounded-r duration-150;
   }
   .sender-message {
     @apply rounded-lg flex gap-2 items-baseline shadow px-2 py-1  text-white bg-green-600;
@@ -17,6 +17,14 @@
   .reciever-message {
     @apply rounded-lg flex gap-2 items-baseline shadow px-2 py-1  text-white bg-purple-600;
   }
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
 }
 
 * {
