@@ -1,3 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .input-primary {
+    @apply px-3 py-1.5 rounded-md outline-none bg-transparent border-gray-400 border;
+  }
+  .btn-primary {
+    @apply px-3 bg-blue-500 text-white hover:bg-blue-700 rounded-r duration-150;
+  }
+  .sender-message {
+    @apply rounded-br-none px-3 py-1.5 rounded-md text-white bg-blue-500 text-right flex justify-end;
+  }
+  .reciever-message {
+    @apply rounded-bl-none px-3 py-1.5 rounded-md text-white bg-gray-500 flex ;
+  }
+}
+
+* {
+  font-family: 'Manrope', sans-serif;
+}
