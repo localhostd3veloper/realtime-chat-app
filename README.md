@@ -33,3 +33,14 @@ npm run dev
 ## Author
 
 - [Gautam Anand](https://github.com/localhostd3veloper)
+
+# TODO
+
+  socket.on('disconnect', () => {
+    console.log('User Disconnected', socket.id);
+  });
+A README file that includes:
+− Instructions on how to run the server and client applications.
+− A brief description of the application's architecture and how
+concurrency is handled.
+− Any assumptions or design choices you made and wh
