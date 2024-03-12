@@ -12,13 +12,57 @@
     @apply px-3 bg-blue-500 text-white hover:bg-blue-700 rounded-r duration-150;
   }
   .sender-message {
-    @apply rounded-br-none px-3 py-1.5 rounded-md text-white bg-blue-500 text-right flex justify-end;
+    @apply rounded-lg flex gap-2 items-baseline shadow px-2 py-1  text-white bg-green-600;
   }
   .reciever-message {
-    @apply rounded-bl-none px-3 py-1.5 rounded-md text-white bg-gray-500 flex ;
+    @apply rounded-lg flex gap-2 items-baseline shadow px-2 py-1  text-white bg-purple-600;
   }
 }
 
 * {
   font-family: 'Manrope', sans-serif;
+}
+
+body {
+  background-color: #f1f1f1;
+}
+
+.sender-message-animate {
+  animation: sender-message 0.6s ease-in-out;
+}
+
+@keyframes sender-message {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes reciever-message {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+  
+}
+.reciever-message-animate {
+  animation: reciever-message 0.5s ease-in-out;
+}
+
+/* Scroll bar */
+::-webkit-scrollbar {
+  width: 3px;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
