@@ -28,10 +28,20 @@ const io = new Server(server, {
   },
 });
 
+// Socket io: It listens to 'connection' event
 io.on('connection', (socket) => {
-  console.log(`User Connected : ${socket.id}`);
   socket.on('new_message', (data) => {
-    socket.broadcast.emit('receive_message', data);
+    if (data.roomID) {
+      socket.to(data.roomID).emit('receive_message', data.message);
+      return;
+    }
+    // We use this to send message to everyone excluding the sender
+    // socket.broadcast.emit('receive_message', data.message);
+  });
+
+  socket.on('join_room', (data) => {
+    socket.join(data.roomID);
+    socket.to(data.roomID).emit('user_joined', data.username);
   });
 });
 
