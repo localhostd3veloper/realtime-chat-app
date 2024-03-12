@@ -13,7 +13,7 @@ function TypeMessage({
         autoFocus
         id='message'
         ref={messageRef}
-        className='h-full bg-transparent flex-1 outline-none p-3'
+        className='h-full bg-transparent flex-1 outline-none border shadow border-gray-300 p-3'
         type='text'
         name='message'
         onChange={(e) => (message.current = e.target.value)}
@@ -25,8 +25,8 @@ function TypeMessage({
           }
         }}
       />
-      <button className='btn-primary' onClick={sendMessage}>
-        Send
+      <button className='btn-primary flex items-center' onClick={sendMessage}>
+        <span className='material-symbols-outlined'>send</span>
       </button>
     </section>
   );
