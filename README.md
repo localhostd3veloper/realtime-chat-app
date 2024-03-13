@@ -28,7 +28,7 @@ npm run dev
 
 - React (Vite)
 - Socket.io
-- Express
+- Express (Node.js)
 
 ## Author
 
