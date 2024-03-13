@@ -1,8 +1,9 @@
 set -e
-
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RESET='\033[0m'
+clear
+
 
 echo -e "${GREEN} Hello!"
 echo " This script will set up the project for you."
@@ -14,6 +15,8 @@ npm i -g pnpm
 
 cd server
 pnpm install
+
+echo 
 cd ../client
 pnpm install
 
