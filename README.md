@@ -1,6 +1,6 @@
 # Realtime Chat App using React, Node.js, Express, and Socket.io
 
-## Overview
+## Overview 📙
 
 This project is a real-time chat application that allows users to communicate with each other in real time. It uses React and Socket.io for the front end and Node.js and Express for the back end.
 
@@ -8,11 +8,11 @@ This project is a real-time chat application that allows users to communicate wi
 - Once they open the shared URL, they will be prompted to enter their `username`.
 - A `1 sec` sound is played when a message is sent, to improve user experience.
 
-## Screenshots
+## Screenshots 📷
 
 <img src="screenshot.png">
 
-## Application Architecture
+## Application Architecture 📢
 
 - Client
 
@@ -30,7 +30,7 @@ The React Application is built using `Vite` and `Typescript` and styled with `Ta
 
 > The Server application is a `Node.js` application that uses `Socket.io` to communicate with the Client.
 
-### Handling Concurrency
+### Handling Concurrency ⛺
 
 Handling multiple users simultaneously is a common problem in real-time applications.
 
@@ -42,7 +42,7 @@ I have used [Cluster Adapter](https://socket.io/docs/v4/cluster-adapter/) for ha
 - Every packet that is sent to multiple clients `(e.g. io.to("room1").emit() or socket.broadcast.emit())` is also sent to other workers via the IPC channel.
 - The above implementation can be seen [here](https://github.com/localhostd3veloper/realtime-chat-app/blob/main/server/src/index.ts#L66)
 
-## Environment Requirements
+## Environment Requirements ⛺
 
 - [Node.js](https://nodejs.org/en/)
 - [NPM](https://www.npmjs.com/)
@@ -95,7 +95,7 @@ npm run dev
 
 ### Server
 
-1. Open a new terminal and move to the `server` directory and install the `dependencies`
+1. Open a new terminal, move to the `server` directory and install the `dependencies`
 
 ```bash
 cd realtime-chat-app/server && npm install
@@ -107,6 +107,6 @@ cd realtime-chat-app/server && npm install
 npm run dev
 ```
 
-## Author
+## Author 🖥️
 
 - [Gautam Anand](https://github.com/localhostd3veloper)
