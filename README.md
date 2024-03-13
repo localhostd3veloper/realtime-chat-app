@@ -2,7 +2,15 @@
 
 ## Overview
 
-This project is a realtime chat application that allows users to communicate with each other in real-time. It uses React and Socket.io for the front-end and Node.js and Express for the back-end.
+This project is a real-time chat application that allows users to communicate with each other in real time. It uses React and Socket.io for the front end and Node.js and Express for the back end.
+- This app works on the principle of rooms, you can create a room on the first screen by entering your username and your own unique `room-id` and sharing the room URL with your friends/family.
+- Once they open the shared URL, they will be prompted to enter their `username`.
+- A `1 sec` sound is played when a message is sent, to improve user experience.
+
+## Screenshots
+![image](https://github.com/localhostd3veloper/realtime-chat-app/assets/64231917/ff0ff307-8b26-477f-85a1-5da19fa08cd6)
+
+
 
 ## Application Architecture
 
@@ -26,7 +34,7 @@ The React Application is built using `Vite` and `Typescript` and styled with `Ta
 
 Handling multiple users simultaneously is a common problem in real-time applications.
 
-- Especially when you're using websockets.
+- Especially when you're using web sockets.
 
 I have used [Cluster Adapter](https://socket.io/docs/v4/cluster-adapter/) for handling concurrency.
 
