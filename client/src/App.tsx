@@ -13,6 +13,9 @@ import CreateRoomModal from './components/CreateRoomModal';
 
 import { getMessageWithMetaData } from './utils/common';
 
+//outgoing message audio
+import outgoing from '../assets/outgoing.mp3';
+
 // socket
 const socket = io('http://localhost:8080');
 
@@ -63,7 +66,6 @@ function App() {
   useEffect(() => {
     // receive message
     socket.on('receive_message', (message: IMessage) => {
-      console.log(message);
       setMessages((messages) => [...messages, message]);
     });
 
@@ -100,6 +102,7 @@ function App() {
           position: 'bottom-center',
         }
       );
+      setUserInviteModal(true);
       document.getElementById('username')?.focus();
       return;
     }
@@ -110,6 +113,11 @@ function App() {
 
     // update messages global state
     setMessages((messages) => [...messages, newMsg]);
+
+    // play audio
+    const audio = new Audio(outgoing);
+    audio.volume = 0.5;
+    audio.play();
 
     // emit message to server
     socket.emit('new_message', { message: newMsg, roomID: roomID.current });
@@ -148,7 +156,7 @@ function App() {
           + Create Room
         </button>
         <button
-          className='btn-primary rounded py-2 font-semibold'
+          className='btn-primary rounded py-2 font-semibold flex items-center gap-1'
           onClick={() => {
             navigator.clipboard.writeText(
               window.location.href.split('?')[0] + '?room-id=' + roomID.current
@@ -158,7 +166,7 @@ function App() {
             });
           }}
         >
-          Copy Link
+          <span className='material-symbols-outlined'>share</span> Share
         </button>
       </section>
       <MessageList messages={messages} username={username} roomID={roomID} />
